@@ -1,0 +1,32 @@
+header{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 23px 5%;
+    align-items: center;
+    z-index: 100;
+    border: 2px solid #fff;
+    border-radius: 35px;
+    background-color: #ffffff5b;
+}
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "poppins", sans-serif;
+}
+
+body{
+    background: url(ASK.JPG) no-repeat center center / cover;
+    height: 100vh;
+    padding: 50px 5%;
+}
+
+  .container {
+    position: relative;
+    background: rgba(220, 220, 220, 0);
+    height: 100%;
+  }

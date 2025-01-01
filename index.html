@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form with Navbar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+            padding: 10px 10px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 10px;
+            height: 100vh;
+            background-image: url(pixel.jpg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            min-height: 100vh;
+        }
+        nav {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            border-radius: 30px;
+            align-items: center;
+            color: rgb(6, 7, 6);
+        }
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+        .nav-links button {
+            background-color: rgba(0, 0, 0, 0.1);
+            color: #060806;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .nav-links button:hover {
+            background-color: #0bfd0b;
+            color: rgb(248, 247, 247);
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-info span {
+            font-weight: bold;
+        }
+        .login-container {
+            margin: auto;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 15px 25px rgba(243, 239, 239, 0.979);
+            width: 250px;
+            text-align: center;
+        }
+        .login-container h2 {
+            margin-bottom: 5px;
+        }
+        .login-container input {
+            width: 100%;
+            padding: 5px;
+            margin: 10px 0;
+            border: 3px solid #ccc;
+            border-radius: 10px;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+        .login-container button:hover {
+            background-color: #3af129;
+        }
+        .welcome-container {
+            display: none;
+            margin: auto;
+            text-align: center;
+            font-size: 24px;
+            color: white;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            width: 80%;
+        }
+        .welcome-container button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ff5e00;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .welcome-container button:hover {
+            background-color: #e64a00;
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar" style="display: none;">
+        <div class="user-info">
+            <span id="usernameDisplay"></span>
+            <button onclick="logout()">Logout</button>
+        </div>
+        <div class="nav-links">
+            <button id="homeButton">HOME</button>
+            <button id="navButton">NAVIGASI</button>
+            <button id="dbButton">DATABASE</button>
+            <button id="problemButton">PROBLEM</button>
+            <button id="staffButton">STAFF</button>
+        </div>
+    </nav>
+
+    <div class="login-container" id="loginContainer">
+        <h2>Login</h2>
+        <form id="loginForm" onsubmit="return handleLogin(event)">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <button onclick="createNewAccount()">Create New Username</button>
+        <button onclick="changePassword()">Change Password</button>
+    </div>
+
+    <!-- Halaman Welcome -->
+    <div class="welcome-container" id="homeContainer">
+        <h1>Welcome to HOME</h1>
+        <button onclick="goBack()">Back</button>
+    </div>
+
+    <div class="welcome-container" id="navContainer">
+        <h1>Welcome to NAVIGASI</h1>
+        <button onclick="goBack()">Back</button>
+    </div>
+
+    <div class="welcome-container" id="dbContainer">
+        <h1>Welcome to DATABASE</h1>
+        <button onclick="goBack()">Back</button>
+    </div>
+
+    <div class="welcome-container" id="problemContainer">
+        <h1>Welcome to PROBLEM</h1>
+        <button onclick="goBack()">Back</button>
+    </div>
+
+    <div class="welcome-container" id="staffContainer">
+        <h1>Welcome to STAFF</h1>
+        <button onclick="goBack()">Back</button>
+    </div>
+
+    <script>
+        const users = JSON.parse(localStorage.getItem('users')) || { 'testuser': 'password123' };
+        const loggedInUser = localStorage.getItem('loggedInUser');
+
+        function saveUsers() {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (users[username] && users[username] === password) {
+                alert('Login successful!');
+                localStorage.setItem('loggedInUser', username);
+                displayNavbar(username);
+            } else {
+                alert('Invalid username or password. Please try again or create an account.');
+            }
+        }
+
+        function createNewAccount() {
+            const newUsername = prompt('Enter a new username:');
+            if (newUsername && !users[newUsername]) {
+                const newPassword = prompt('Enter a new password:');
+                if (newPassword) {
+                    users[newUsername] = newPassword;
+                    saveUsers();
+                    alert('Account successfully created. You can now log in.');
+                } else {
+                    alert('Account creation canceled.');
+                }
+            } else {
+                alert('Username already exists or is invalid. Please try a different username.');
+            }
+        }
+
+        function changePassword() {
+            const username = prompt('Enter your username:');
+            if (username && users[username]) {
+                const currentPassword = prompt('Enter your current password:');
+                if (currentPassword === users[username]) {
+                    const newPassword = prompt('Enter your new password:');
+                    if (newPassword) {
+                        users[username] = newPassword;
+                        saveUsers();
+                        alert('Password changed successfully.');
+                    } else {
+                        alert('Password change canceled.');
+                    }
+                } else {
+                    alert('Incorrect current password.');
+                }
+            } else {
+                alert('Username not found. Please create an account.');
+            }
+        }
+
+        function displayNavbar(username) {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('navbar').style.display = 'flex';
+            document.getElementById('usernameDisplay').textContent = `Welcome, ${username}`;
+        }
+
+        function logout() {
+            localStorage.removeItem('loggedInUser');
+            location.reload();
+        }
+
+        function goBack() {
+            document.querySelectorAll('.welcome-container').forEach(container => container.style.display = 'none');
+            document.getElementById('navbar').style.display = 'flex';
+        }
+
+        function showPage(containerId) {
+            document.getElementById('navbar').style.display = 'none';
+            document.querySelectorAll('.welcome-container').forEach(container => container.style.display = 'none');
+            document.getElementById(containerId).style.display = 'block';
+        }
+
+        document.getElementById('homeButton').addEventListener('click', () => showPage('homeContainer'));
+        document.getElementById('navButton').addEventListener('click', () => showPage('navContainer'));
+        document.getElementById('dbButton').addEventListener('click', () => showPage('dbContainer'));
+        document.getElementById('problemButton').addEventListener('click', () => showPage('problemContainer'));
+        document.getElementById('staffButton').addEventListener('click', () => showPage('staffContainer'));
+
+        if (loggedInUser) {
+            displayNavbar(loggedInUser);
+        }
+    </script>
+</body>
+</html>

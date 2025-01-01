@@ -1,0 +1,7 @@
+body {
+    background-image: url('w.jpg');
+    background-size: cover; /* atau contain */
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  

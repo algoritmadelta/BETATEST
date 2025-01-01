@@ -1,0 +1,12 @@
+@media (max-width: 768px) {
+    body {
+      background-image: url('w.jpg');
+    }
+  }
+  
+  @media (min-width: 769px) {
+    body {
+      background-image: url('w.jpg');
+    }
+  }
+  
